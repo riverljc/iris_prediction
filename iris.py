@@ -1,19 +1,38 @@
 import streamlit as st
-import joblib
 import pandas as pd
+import joblib
+from sklearn.tree import DecisionTreeClassifier
 
-st.write("# IRIS Prediction")
+import os
+
+# 获取当前工作目录
+#current_directory = os.getcwd()
+
+# 显示当前工作目录
+#st.write(f"当前工作目录: {current_directory}")
+
+# 获取当前工作目录下的所有文件和文件夹
+#files_and_directories = os.listdir('.')
+
+# 显示当前工作目录下的所有文件和文件夹
+#st.write("当前目录下的文件和文件夹:")
+#for item in files_and_directories:
+#    st.write(item)
+
+st.write("### IRIS Prediction")
 
 col1, col2, col3, col4 = st.columns(4)
 
 bl = col1.number_input("請輸入花瓣長:")
-bw = col2.number_input("請輸入花瓣寬:")
+bw = col1.number_input("請輸入花瓣寬:")
 rl = col3.number_input("請輸入花萼長:")
-rw = col4.number_input("請輸入花萼寬:")
+rw = col3.number_input("請輸入花萼寬:")
 
 df_pred = pd.DataFrame([[bl,bw,rl,rw]])
-    
-model = joblib.load('dt_model.pkl')
+
+# 加载模型并测试
+with open('dt_model.pkl', 'rb') as f:
+    model = joblib.load(f)
 
 prediction = model.predict(df_pred)
 prediction_prob = model.predict_proba(df_pred)
@@ -27,5 +46,4 @@ if st.button('Predict'):
         st.write('<p class="big-font">This flower is <font color="red">virginica</font>.</p>',unsafe_allow_html=True)
         
     st.write('<p class="big-font"><font color="blue">'+str(prediction_prob)+'</font></p>',unsafe_allow_html=True)    
-
         
